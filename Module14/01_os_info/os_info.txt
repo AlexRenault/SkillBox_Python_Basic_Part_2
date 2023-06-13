@@ -1,0 +1,4 @@
+OS info is 
+uname_result(system='Darwin', node='Mac-mini.local', release='21.6.0', version='Darwin Kernel Version 21.6.0: Mon Apr 24 21:10:53 PDT 2023; root:xnu-8020.240.18.701.5~1/RELEASE_X86_64', machine='x86_64')
+
+Python version is 3.10.11 (v3.10.11:7d4cc5aa85, Apr  4 2023, 19:05:19) [Clang 13.0.0 (clang-1300.0.29.30)] ('64bit', '')
