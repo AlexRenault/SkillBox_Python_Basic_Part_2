@@ -25,10 +25,10 @@ else:
     add_index = 1
     end_element = len(elements_list) - 1
 
-for i_shift in range(start_shift, stop_shift, -1):          #
-    shift_element = elements_list[first_element]            #
-    for index in range(start_list, stop_list, step_list):      #
-        elements_list[index] = elements_list[index + add_index]     #
+for i_shift in range(start_shift, stop_shift, -1):          
+    shift_element = elements_list[first_element]            
+    for index in range(start_list, stop_list, step_list):      
+        elements_list[index] = elements_list[index + add_index]     
     elements_list[end_element] = shift_element
 
 print('Сдвинутый список: ', elements_list)
