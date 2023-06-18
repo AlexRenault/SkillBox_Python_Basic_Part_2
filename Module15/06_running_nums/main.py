@@ -1,10 +1,12 @@
 # TODO здесь писать код
-elements_list = [1, 2, 3, 4, 5, 6]
+elements_list = []
+number = int(input('Введите количество элементов списка: '))
+for index in range(number):
+    print('Введите ', index + 1, 'элемент списка (целые числа):', end='')
+    element = int(input())
+    elements_list.append(element)
 
 shift = int(input('Сдвиг: '))
-while shift > len(elements_list):
-    print('В списке всего ', len(elements_list), 'элементов.')
-    shift = int(input('Задайте величину сдвига, меньше длины списка: '))
 
 print('Изначальный список: ', elements_list)
 
