@@ -3,3 +3,14 @@ shop = [['каретка', 1200], ['шатун', 1000], ['седло', 300],
         ['обод', 2000], ['шатун', 200], ['седло', 2700]]
 
 # TODO здесь писать код
+count = 0
+cost = 0
+detail = input('Название детали: ')
+
+for i_detail in shop:
+    if detail == i_detail[0]:
+        count += 1
+        cost += i_detail[1]
+
+print('Количество деталей - ', count)
+print('Общая стоимость - ', cost)
