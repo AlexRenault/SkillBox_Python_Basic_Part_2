@@ -12,7 +12,7 @@ for index in range(pair_words):
 
 print(synonyms)
 
-print('\nПоиск синонимов. Для завершения введите "стоп.')
+print('\nПоиск синонимов. Для завершения введите "стоп".')
 user_word, synonim = '', ''
 
 while user_word != 'стоп':
@@ -24,5 +24,4 @@ while user_word != 'стоп':
         synonim = 'Синоним: ' + key_print[0].title()
     elif user_word != 'стоп':
         synonim = 'Такого слова в словаре нет.'
-
     print(synonim)
