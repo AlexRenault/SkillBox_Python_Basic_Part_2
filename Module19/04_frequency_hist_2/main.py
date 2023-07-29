@@ -2,10 +2,11 @@
 def create_dict(txt):
     txt_dict = dict()
     for symbol in txt:
-        if symbol in txt_dict:
-            txt_dict[symbol] += 1
-        else:
-            txt_dict[symbol] = 1
+        txt_dict[symbol] = txt_dict.get(symbol, 0) + 1
+#        if symbol in txt_dict:
+#            txt_dict[symbol] += 1
+#        else:
+#            txt_dict[symbol] = 1
     return txt_dict
 
 
