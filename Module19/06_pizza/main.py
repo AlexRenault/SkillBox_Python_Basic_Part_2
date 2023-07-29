@@ -14,26 +14,27 @@ orders_dict = {}
 print('Информацию о заказе вводите через пробел - Фамилия Название_пиццы Количество')
 
 for i_order in range(num_orders):
-    order = input(f'Введите {i_order + 1} заказ: ')
-    orders.append(order.split())
-    orders[i_order][2] = int(orders[i_order][2])
-    pizza = dict()
-    pizza[orders[i_order][1]] = orders[i_order][2]
-    if orders[i_order][0] not in orders_dict.keys():
-        orders_dict[orders[i_order][0]] = pizza
+    order, pizza, count = input(f'Введите {i_order + 1} заказ: ').split()
+
+    if order not in orders_dict:
+        orders_dict[order] = {pizza: int(count)}
     else:
-        if orders[i_order][1] != orders_dict.get(orders[i_order][0]):
-            orders_dict[orders[i_order][0]].update(pizza)
+        if pizza not in orders_dict[order]:
+            orders_dict[order].update({pizza: int(count)})
         else:
-            orders_dict[orders[i_order][0]][orders[i_order][1]] += orders_dict[orders[i_order]][0][orders[i_order][1]]
+            orders_dict[order][pizza] += int(count)
 
 sorted(orders_dict)
 for surname in orders_dict:
-
-    pizza_list = sorted((value, key) for (key, value) in orders_dict[surname].items())
-    pizza_sorted = dict([(key, value) for value, key in pizza_list])
-    orders_dict[surname] = pizza_sorted
+    #pizza_list = sorted((value, key) for (key, value) in orders_dict[surname].items())
+    #pizza_sorted = dict([(key, value) for value, key in pizza_list])
+    #orders_dict[surname] = pizza_sorted
     print(surname, ':')
     for order in orders_dict[surname]:
         print('\t\t', order, orders_dict[surname][order])
+
+for surname in orders_dict.keys():
+    print(f'{surname} :')
+    for pizza in orders_dict[surname].keys():
+        print('\t\t{}: {}'.format(pizza, orders_dict[surname][pizza]))
 
