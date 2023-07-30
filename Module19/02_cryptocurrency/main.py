@@ -1,3 +1,5 @@
+from pprint import pprint
+
 data = {
     "address": "0x544444444444",
     "ETH": {
@@ -46,3 +48,20 @@ data = {
 
 
 # TODO здесь писать код
+print('Список ключей словаря data: ', data.keys())
+print('\nСписок значение словаря data: ', data.values())
+print()
+
+data["ETH"]["total_diff"] = 100
+
+data["tokens"][0]["fst_token_info"]["name"] = "doge"
+
+summ = 0
+
+for i_token in range(len(data["tokens"])):
+    summ += data['tokens'][i_token].pop('total_out')
+data["ETH"]["totalOut"] = summ
+
+data["tokens"][1]["sec_token_info"]["total_price"] = data["tokens"][1]["sec_token_info"].pop("price")
+
+pprint(data)

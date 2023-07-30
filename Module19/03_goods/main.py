@@ -25,3 +25,16 @@ store = {
 }
 
 # TODO здесь писать код
+cost = {}
+
+for goods_key in goods.keys():
+    if goods[goods_key] in store.keys():
+        summ_cost, num_goods = 0, 0
+        for i_goods in range(len(store[goods[goods_key]])):
+            summ_cost += store[goods[goods_key]][i_goods]['quantity'] * store[goods[goods_key]][i_goods]['price']
+            num_goods += store[goods[goods_key]][i_goods]['quantity']
+            cost[goods_key] = [num_goods, summ_cost]
+
+for item in cost.keys():
+    cost_item = '{:,}'.format(cost[item][1]).replace(',', ' ')
+    print('{} -  {} штук, стоимость {} рублей.'.format(item, cost[item][0], cost_item))
