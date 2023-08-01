@@ -1,3 +1,13 @@
+def find_interests(st_dict):
+    interests_list = []
+    count = 0
+    for id_student, info_student in st_dict.items():
+        interests_list += info_student['interests']
+        count += len(info_student['surname'])
+    return interests_list, count
+
+
+# TODO исправить код
 students = {
     1: {
         'name': 'Bob',
@@ -19,26 +29,9 @@ students = {
     }
 }
 
+pairs = [(student, student_age['age']) for student, student_age in students.items()]
+interests_list, length_surname = find_interests(students)
 
-def f(dict):
-    lst = []
-    string = ''
-    for i in dict:
-        lst += (dict[i]['interests'])
-        string += dict[i]['surname']
-    cnt = 0
-    for s in string:
-        cnt += 1
-    return lst, cnt
-
-
-pairs = []
-for i in students:
-    pairs += (i, students[i]['age'])
-
-
-my_lst = f(students)[0]
-l = f(students)[1]
-print(my_lst, l)
-
-# TODO исправить код
+print('Список пар "ID студента — возраст": ', pairs)
+print('\nПолный список интересов всех студентов: ', interests_list)
+print('\nОбщая длина всех фамилий студентов: ', length_surname)
