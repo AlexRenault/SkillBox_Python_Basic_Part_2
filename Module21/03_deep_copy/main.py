@@ -40,9 +40,12 @@ def print_site(struct, string='', space=0, brand=''):
 
 # TODO здесь писать код
 site_count = int(input('Сколько сайтов? '))
+site_list = []
 
-for _ in range(site_count):
+for idx in range(site_count):
     product = input('Введите название продукта для нового сайта: ')
     print('Сайт для ', product, ':')
-    site_string = print_site(site, brand=product)
-    print(site_string)
+    site_list.append(print_site(site, brand=product))
+    print(site_list[idx])
+
+print(*site_list)
