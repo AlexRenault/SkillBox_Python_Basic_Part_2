@@ -1,4 +1,4 @@
-import pprint
+import pprint, copy
 
 site = {
     'html': {
@@ -37,19 +37,19 @@ def print_site(struct, string='', space=0, brand=''):
 
 
 def change_site(struct, key_lst, brand):
-
+    new_site = struct
     for _ in key_lst:
         for i_key, i_volume in struct.items():
             if isinstance(i_volume, dict):
                 change_site(i_volume, key_lst, brand)
             else:
                 if i_key == key_lst[0]:
-                    struct[i_key] = i_volume.replace('телефон', brand)
+                    new_site[i_key] = i_volume.replace('телефон', brand)
                 if i_key == key_lst[1]:
-                    struct[i_key] = i_volume.replace('iphone', brand)
+                    new_site[i_key] = i_volume.replace('iphone', brand)
                 return
 
-    return struct
+    return new_site
 
 
 # TODO здесь писать код
@@ -60,7 +60,7 @@ key_list = ['title', 'h2']
 for idx in range(site_count):
     product = input('Введите название продукта для нового сайта: ')
     product_list.append(product)
-    site_list.append(change_site(site, key_list, product))
+    site_list.append(change_site(copy.deepcopy(site), key_list, product))
     for i_site in range(len(site_list)):
         print('Сайт для ', product_list[i_site], ':')
         print(print_site(site_list[i_site]))
