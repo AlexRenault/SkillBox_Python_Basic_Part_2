@@ -1,23 +1,23 @@
 # TODO здесь писать код
 def check_count(user_lst):
     if len(user_lst) < 3:
-        raise IndexError
+        raise IndexError('\t Строка содержит не все данные.')
 
 
 def check_name(name):
     if not name.isalpha():
-        raise NameError
+        raise NameError('\t В имени содержаться не только буквы.')
 
 
 def check_mail(mail):
     if not (mail.count('@') and mail.count('.')):
-        raise SyntaxError
+        raise SyntaxError('\t Не верный формат адреса электронной почты (отсутствует @ и/или ".").')
 
 
 def check_age(age):
     if age.isnumeric():
         if not 10 < int(age) <= 99:
-            raise ValueError
+            raise ValueError('\t Возраст НЕ является числом от 0 до 99.')
 
 
 with open('registrations.txt', 'r', encoding='utf-8') as open_file:
@@ -27,21 +27,18 @@ with open('registrations.txt', 'r', encoding='utf-8') as open_file:
                 file = good_file
                 user = i_line.split()
                 try:
-                    check_count(user)
-                    check_name(user[0])
-                    check_mail(user[1])
-                    check_age(user[2])
-                except IndexError:
-                    user.append('\t Не корректное количество полей.')
-                    file = bad_file
-                except NameError:
-                    user.append('\t Поле "Имя" содержит цифры.')
-                    file = bad_file
-                except SyntaxError:
-                    user.append('\t Не корректно указан адрес электронной почты.')
-                    file = bad_file
-                except ValueError:
-                    user.append('\t Возраст не является числом щт 10 до 99.')
-                    file = bad_file
-                finally:
-                    file.write(' '.join(user) + '\n')
+                    if len(user) < 3:
+                        raise IndexError(''.join([i_line.rstrip(), '\t Строка содержит не все данные.']))
+                    if not user[0].isalpha():
+                        raise NameError(''.join([i_line.rstrip(), '\t В имени содержаться не только буквы.']))
+                    if not (user[1].count('@') and user[1].count('.')):
+                        raise SyntaxError(''.join([i_line.rstrip() + '\t Не верный формат адреса электронной почты '
+                                                            '(отсутствует @ и/или ".").']))
+                    if user[2].isnumeric():
+                        if not 10 < int(user[2]) <= 99:
+                            raise ValueError(''.join([i_line.rstrip(), '\t Возраст НЕ является числом от 0 до 99.']))
+
+                except (IndexError, NameError, SyntaxError, ValueError) as err:
+                    bad_file.write(str(err) + '\n')
+                else:
+                    good_file.write(i_line)
