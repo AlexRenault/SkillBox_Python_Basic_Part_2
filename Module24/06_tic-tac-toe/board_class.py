@@ -19,7 +19,8 @@ class Board:
         print('-' * 13)
 
     def change_cell(self, num, user_sym):
-        self.board[num].occupied = user_sym
+        self.board[num].occupied = True
+        self.board[num].symbol = user_sym
 
     def clear(self):
         self.board = [Cell(idx, idx) for idx in range(1, 10)]
