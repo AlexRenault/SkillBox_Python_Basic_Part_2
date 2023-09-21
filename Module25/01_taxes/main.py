@@ -48,30 +48,33 @@ class CountryHouse(Property):
         return self.worth / 500
 
 
+def verify(message):
+    money = 0
+    while money == 0 or not isinstance(money, (int, float)):
+        try:
+            money = float(input(message))
+        except (TypeError, ValueError) as err:
+            print('Не корректный ввод. ', err)
+    return money
+
+
 obj_title = ['Квартира', 'Машина', 'Дача']
 name_obj = [Apartment, Car, CountryHouse]
 objects = []
 
-user_money = 0
-while user_money == 0 or not isinstance(user_money, (int, float)):
-    try:
-        user_money = float(input('Какой суммой Вы располагаете:'))
-    except (ValueError, TypeError) as err:
-        print(err, 'Сумма должна содержать только цифры.')
+string = 'Какой суммой Вы располагаете: '
+user_money = verify(string)
 
 for idx, i_obj in enumerate(name_obj):
-    cost = 0
-    while cost == 0 or not isinstance(cost, (int, float)):
-        try:
-            cost = float(input(f'Введите стоимость объекта {obj_title[idx]}: '))
-            objects.append(i_obj(cost))
-        except (TypeError, ValueError) as err:
-            print('Не корректный ввод. ', err)
+    string = f'Введите стоимость объекта {obj_title[idx]}: '
+    cost = verify(string)
+    objects.append(i_obj(cost))
     print(f'Налог на {obj_title[idx]} - {objects[idx].tax_obj}Р')
     user_money -= objects[idx].tax_obj
     if user_money < 0:
         print('Не хватает {}Р'.format(-user_money))
-    print(f'После уплаты этого налога осталось - {user_money}Р\n')
+    else:
+        print(f'После уплаты этого налога осталось - {user_money}Р\n')
 
 for i_obj in objects:
     print(i_obj)
