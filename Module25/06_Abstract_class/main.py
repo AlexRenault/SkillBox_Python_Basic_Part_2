@@ -1,10 +1,10 @@
 # TODO здесь писать код
-
+from classes import *
 
 
 # Примеры работы с классом:
 # Создание экземпляров классов
-circle = Circle(5)
+circle = Circle(10)
 rectangle = Rectangle(4, 6)
 triangle = Triangle(3, 8)
 
