@@ -11,8 +11,8 @@ def one_year_of_war():
     attacker = Attacker("Убийца Ольга")
     second_attacker = Attacker("Убийца Траур")
     healer = Healer("Монах Игнат")
-    second_healer = Healer("Монах Ирэна")
-    good_team = [tank, attacker, second_attacker, second_healer, healer]
+    healer_2 = Healer("Монах Ирэна")
+    good_team = [tank, attacker, second_attacker, healer_2, healer]
 
     # Код ниже изменять нельзя!
 

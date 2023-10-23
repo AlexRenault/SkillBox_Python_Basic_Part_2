@@ -3,7 +3,7 @@ import random
 
 class Hero:
     # Базовый класс, который не подлежит изменению
-    # У каждого наследника будут атрибуты:
+    # У каждого будут атрибуты:
     # - Имя
     # - Здоровье
     # - Сила
@@ -75,48 +75,47 @@ class Healer(Hero):
 
     def __str__(self):
         return 'Name: {0} | HP: {1}'.format(self.name, self.get_hp())
+
     # Методы:
-    # - атака - может атаковать врага, но атакует только в половину силы self.__power
 
     def attack(self, target):
+        # - атака - может атаковать врага, но атакует только в половину силы self.__power
         target.take_damage(self.get_power() / 2)
-    # - получение урона - т.к. защита целителя слаба - он получает на 20% больше урона (1.2 * damage)
 
     def take_damage(self, damage):
+        # - получение урона - т.к. защита целителя слаба - он получает на 20% больше урона (1.2 * damage)
         self.set_hp(self.get_hp() - damage * 1.2)
         super().take_damage(damage)
-    # - исцеление - увеличивает здоровье цели на величину равную своей магической силе
 
     def healing(self, friend):
+        # - исцеление - увеличивает здоровье цели на величину равную своей магической силе
         friend.set_hp(friend.get_hp() + self.magic_power)
-    # - выбор действия - получает на вход всех союзников и всех врагов и на основе своей стратегии выполняет ОДНО из
-    # действий (атака, исцеление) на выбранную им цель
 
     def make_a_move(self, friends, enemies):
-        print(self.name, end=' ')
+        # - выбор действия - получает на вход всех союзников и всех врагов и на основе своей стратегии выполняет ОДНО из
+        # действий (атака, исцеление) на выбранную им цель
+
+        # Поиск героя с минимальным HP
         target_of_hp = friends[0]
         min_health = target_of_hp.get_hp()
         for friend in friends:
             if friend.get_hp() < min_health:
                 target_of_hp = friend
                 min_health = target_of_hp.get_hp()
-
-        if min_health < 60 and self.magic_power > 0:
-            print("Исцеляю", target_of_hp.name)
+        # Исцеление героя с минимальным значением HP
+        # Если HP меньше или равно 100 и есть магическая сила, то к HP героя добавляем магическую силу
+        if min_health <= 100 and self.magic_power > 0:
+            print(self.name, "- исцеляю - ", target_of_hp.name)
             self.healing(target_of_hp)
         else:
+            # Если монстров нет, то возвращаемся не атакуя
             if not enemies:
                 return
-            min_hp_enemy = enemies[0].get_hp()
-            target_attack = enemies[0]
-            for enemy in enemies:
-                if enemy.get_hp() < min_hp_enemy:
-                    min_hp_enemy = enemy.get_hp()
-                    target_attack = enemy
-            print(self.name, ' - атакую - ', target_attack.name)
+            # Атакуем слабейшего монстра
+            target_attack = attack_min_hp(self.name, enemies)
             self.attack(target_attack)
-        super().make_a_move(friends, enemies)
-        print('\n')
+            super().make_a_move(friends, enemies)
+            print('\n')
 
 
 class Tank(Hero):
@@ -127,55 +126,58 @@ class Tank(Hero):
     def __init__(self, name):
         super().__init__(name)
         self.defense = 1
-        self.shield = True
+        self.shield = False
 
     def __str__(self):
         return 'Name: {0} | HP: {1}'.format(self.name, self.get_hp())
+
     # Методы:
-    # - атака - атакует, но т.к. доспехи очень тяжелые - наносит половину урона (self.__power)
 
     def attack(self, target):
+        # - атака - атакует, но т.к. доспехи очень тяжелые - наносит половину урона (self.__power)
         target.take_damage(self.get_power() / 2)
-    # - получение урона - весь входящий урон делится на показатель защиты (damage/self.defense) и только потом
-    # отнимается от здоровья
 
     def take_damage(self, damage):
+        # - получение урона - весь входящий урон делится на показатель защиты (damage/self.defense) и только потом
+        # отнимается от здоровья
         damage /= self.defense
-        self.set_hp(damage)
+        self.set_hp(self.get_hp() - damage)
         super().take_damage(damage)
-    # - поднять щит - если щит не поднят - поднимает щит. Это увеличивает показатель брони в 2 раза, но уменьшает
-    # показатель силы в 2 раза.
 
     def shield_up(self):
+        # - поднять щит - если щит не поднят - поднимает щит. Это увеличивает показатель брони в 2 раза, но уменьшает
+        # показатель силы в 2 раза.
         if not self.shield:
             self.shield = True
             self.defense *= 2
             self.set_power(self.get_power() / 2)
-    # - опустить щит - если щит поднят - опускает щит. Это уменьшает показатель брони в 2 раза, но увеличивает
-    # показатель силы в 2 раза.
 
     def shield_down(self):
+        # - опустить щит - если щит поднят - опускает щит. Это уменьшает показатель брони в 2 раза, но увеличивает
+        # показатель силы в 2 раза.
         if self.shield:
             self.shield = False
             self.defense /= 2
             self.set_power(self.get_power() * 2)
-    # - выбор действия - получает на вход всех союзников и всех врагов и на основе своей стратегии выполняет ОДНО из
-    # действий (атака, поднять щит/опустить щит) на выбранную им цель
 
     def make_a_move(self, friends, enemies):
-        if self.get_hp() < 50 and not self.shield:
+        # - выбор действия - получает на вход всех союзников и всех врагов и на основе своей стратегии выполняет ОДНО из
+        # действий (атака, поднять щит/опустить щит) на выбранную им цель
+        # Если НР уменьшилось до 50% - поднимаем щит
+        if self.get_hp() <= 75 and not self.shield:
             print('Здоровья осталось меньше 50%. Поднимаю щит.')
             self.shield_up()
             return
+        # Если НР больше 50% - опускаем щит.
+        if self.get_hp() > 75 and self.shield:
+            print('здоровье достаточно. Опускаю щит.')
+            self.shield_down()
+            return
+        # Если монстров нет, то возвращаемся не атакуя
         if not enemies:
             return
-        min_hp_enemy = enemies[0].get_hp()
-        target_attack = enemies[0]
-        for enemy in enemies:
-            if enemy.get_hp() < min_hp_enemy:
-                min_hp_enemy = enemy.get_hp()
-                target_attack = enemy
-        print(self.name, ' - атакую - ', target_attack.name)
+        # Атакуем слабейшего монстра
+        target_attack = attack_min_hp(self.name, enemies)
         self.attack(target_attack)
         super().make_a_move(friends, enemies)
 
@@ -186,52 +188,77 @@ class Attacker(Hero):
     # - коэффициент усиления урона (входящего и исходящего)
     def __init__(self, name):
         super().__init__(name)
-        self.power_multiply = 3
+        self.power_multiply = 2
 
     def __str__(self):
         return 'Name: {0} | HP: {1}'.format(self.name, self.get_hp())
+
     # Методы:
-    # - атака - наносит урон равный показателю силы (self.__power) умноженному на коэффициент усиления урона
-    # (self.power_multiply)
 
     def attack(self, target):
+        # - атака - наносит урон равный показателю силы (self.__power) умноженному на коэффициент усиления урона
+        # (self.power_multiply)
+        # после нанесения урона - вызывается метод ослабления power_down.
         target.take_damage(self.get_power() * self.power_multiply)
-        self.power_down()
-    # после нанесения урона - вызывается метод ослабления power_down.
-
-    def power_down(self):
-        self.set_power(self.get_power() - 1)
-    # - получение урона - получает урон равный входящему урона умноженному на половину коэффициента усиления
-    # урона - damage * (self.power_multiply / 2)
-
+        self.power_multiply = self.power_down()
     def take_damage(self, damage):
+        # - получение урона - получает урон равный входящему урона умноженному на половину коэффициента усиления
+        # урона - damage * (self.power_multiply / 2)
         self.set_hp(self.get_hp() - damage * (self.power_multiply / 2))
-    # - усиление (power_up) - увеличивает коэффициента усиления урона в 2 раза
 
     def power_up(self):
+        # - усиление (power_up) - увеличивает коэффициента усиления урона в 2 раза
         return self.power_multiply * 2
-    # - ослабление (power_down) - уменьшает коэффициента усиления урона в 2 раза
 
     def power_down(self):
+        # - ослабление (power_down) - уменьшает коэффициента усиления урона в 2 раза
         return self.power_multiply / 2
-    # - выбор действия - получает на вход всех союзников и всех врагов и на основе своей стратегии выполняет
-    # ОДНО из действий (атака, усиление, ослабление) на выбранную им цель
 
     def make_a_move(self, friends, enemies):
+        print('{} - HP:{}, множитель:{} '.format(
+            self.name, self.get_hp(), self.power_multiply)
+        )
+        # - выбор действия - получает на вход всех союзников и всех врагов и на основе своей стратегии выполняет
+        # ОДНО из действий (атака, усиление, ослабление) на выбранную им цель
+        # Если коэффициент усиления урона меньше 2 - увеличиваем его в 2 раза
         if self.power_multiply < 2:
             self.power_multiply = self.power_up()
-        elif self.power_multiply > 10:
+            print('Увеличиваю силу до - ', self.power_multiply)
+        # Если коэффициент усиления урона больше 10 - уменьшаем
+        elif self.power_multiply > 6:
             self.power_multiply = self.power_down()
+            print('Уменьшаю силу до - ', self.power_multiply)
         else:
+            # Если монстров нет, то возвращаемся не атакуя
             if not enemies:
                 return
-                # min_hp_enemy = enemies[0].get_hp()
-                # target_attack = enemies[0]
-                # for enemy in enemies:
-                #     if enemy.get_hp() < min_hp_enemy:
-                #         min_hp_enemy = enemy.get_hp()
-                #         target_attack = enemy
-            print(self.name, ' - атакую - ', enemies[0].name)  # target_attack.name)
-            self.attack(enemies[0])  # target_attack)
+            # Атакуем слабейшего монстра
+            target_attack = attack_min_hp(self.name, enemies)
+            self.attack(target_attack)
+            print('После атаки: {} - HP:{}, множитель:{} '.format(
+                self.name, self.get_hp(), self.power_multiply)
+            )
             super().make_a_move(friends, enemies)
 
+
+def attack_min_hp(name, enemies):
+    # выбор слабейшего монстра для атаки
+    idx = 0
+    # За слабейшего монстра берем первого в списке
+    min_hp_enemy = enemies[0].get_hp()
+    target_attack = enemies[0]
+    # Проверка НР монстров на равенство 0. Если 0, то не атакуем,
+    for idx, enemy in enumerate(enemies):
+        # Ищем по списку монстра, НР которого не равно 0, выбираем его как монстра с наименьшим НР
+        if enemy.is_alive():
+            min_hp_enemy = enemy.get_hp()
+            target_attack = enemy
+            break
+    # Начиная с выбранного монстра, в списке монстров ищем наименьшее значение НР и
+    # выбираем этого монстра как цель для атаки
+    for i_enemy in range(idx, len(enemies) - 1):
+        if enemies[i_enemy].get_hp() < min_hp_enemy:
+            min_hp_enemy = enemies[i_enemy].get_hp()
+            target_attack = enemies[i_enemy]
+    print(name, ' - атакую - ', target_attack.name)
+    return target_attack
