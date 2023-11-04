@@ -13,8 +13,8 @@ def slowdown(func) -> Callable:
         # print('Время задержки - {} сек'.format(round(time.time() - start_time)))
         """ Вариант задержки с помощью метода sleep()"""
         time.sleep(5)
-        return func
-    return wrapped_func()
+        return func(*args, **kwargs)
+    return wrapped_func
 
 
 @slowdown

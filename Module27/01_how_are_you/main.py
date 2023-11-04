@@ -7,8 +7,8 @@ def how_are_you(func) -> Any:
     def wrapped_func(*args, **kwargs) -> Any:
         input('Как твои дела? ')
         print('А у меня не очень.')
-        return func
-    return wrapped_func()
+        return func(*args, **kwargs)
+    return wrapped_func
 
 
 @how_are_you
