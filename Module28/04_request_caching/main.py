@@ -21,7 +21,6 @@ class LRUCache:
 
     @cache.setter
     def cache(self, new_elem):
-        lst = []
         is_del = False
         if len(self.cache_dict) >= self.capacity:
             # удаляем самый редко вызываемый элемент (последний в словаре)
