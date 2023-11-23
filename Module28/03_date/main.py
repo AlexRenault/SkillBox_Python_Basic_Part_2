@@ -23,8 +23,7 @@ class Date:
     def from_string(cls, string):
         if cls.is_date_valid(string):
             dat = string.split("-")
-            cls.date = Date(dat)
-            return cls.date
+            return Date(dat)
 
 
 date = Date.from_string('10-12-2077')
