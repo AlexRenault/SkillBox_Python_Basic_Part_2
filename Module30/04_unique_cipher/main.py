@@ -1,4 +1,13 @@
 # TODO здесь писать код
+from collections import Counter
+
+
+def count_unique_characters(string):
+    string = string.lower()
+    char_count_list = Counter(string)
+    print(char_count_list)
+    unique = sum(filter(lambda char_count: char_count == 1, char_count_list.values()))
+    return unique
 
 
 # Пример использования:
