@@ -5,3 +5,7 @@ Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, v
 """
 
 # TODO здесь писать код
+import re
+
+pattern = r'\b\w{4}\b'
+print(re.findall(pattern, text))
